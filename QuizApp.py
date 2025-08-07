@@ -9,7 +9,7 @@ class QuizApp:
         self.root.title("AI Quiz Game (OpenRouter Edition)")
         self.root.geometry("900x600")  # Bigger window
 
-        self.api_key = "xxxxxxxxxxxxxx"  # 🔐 Replace with your real key
+        self.api_key = "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"  # 🔐 Replace with your real key
         self.model = "mistralai/mistral-7b-instruct"   # ✅ You can change to gpt-4, llama3, claude, etc.
 
         self.participants = []
@@ -58,14 +58,18 @@ class QuizApp:
             self.answer_buttons.append(btn)
 
         # Scoreboard
-        self.scoreboard = tk.Label(self.root, text="Scores:", font=("Arial", 14), justify="left")
-        self.scoreboard.pack(pady=10)
+        self.scoreboard_frame = tk.LabelFrame(self.root, text="Scoreboard", font=("Arial", 14))
+        self.scoreboard_frame.pack(pady=10, fill="x")
+        self.score_labels = {}  # Store label references per team
 
     def add_participant(self):
         name = self.participant_entry.get().strip()
         if name:
             self.participants.append(name)
             self.scores[name] = 0
+            score_label = tk.Label(self.scoreboard_frame, text=f"{name}: 0", font=("Arial", 12), anchor="w")
+            score_label.pack(fill="x", padx=10)
+            self.score_labels[name] = score_label
             self.participant_entry.delete(0, tk.END)
             self.update_scoreboard()
         else:
@@ -178,8 +182,13 @@ class QuizApp:
         self.show_question()
 
     def update_scoreboard(self):
-        score_text = "\n".join([f"{p}: {self.scores[p]}" for p in self.participants])
-        self.scoreboard.config(text=f"Scores:\n{score_text}")
+        max_score = max(self.scores.values(), default=0)
+        for name in self.participants:
+            score = self.scores[name]
+            if score == max_score and max_score > 0:
+                self.score_labels[name].config(text=f"{name}: {score}", fg="green", font=("Arial", 12, "bold"))
+            else:
+                self.score_labels[name].config(text=f"{name}: {score}", fg="black", font=("Arial", 12))
 
 
 # Run the app
