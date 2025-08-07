@@ -9,7 +9,7 @@ class QuizApp:
         self.root.title("AI Quiz Game (OpenRouter Edition)")
         self.root.geometry("900x600")  # Bigger window
 
-        self.api_key = "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"  # 🔐 Replace with your real key
+        self.api_key = "xxxxxxxxxx"  # 🔐 Replace with your real key
         self.model = "mistralai/mistral-7b-instruct"   # ✅ You can change to gpt-4, llama3, claude, etc.
 
         self.participants = []
